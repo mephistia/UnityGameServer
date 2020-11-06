@@ -18,11 +18,8 @@ public class GameBehaviors : MonoBehaviour
     }
 
     // Atirar
-    //public static void Shoot(GameObject _projectile, Vector3 _direction, Transform _fromTransform)
-    //{
-
-    //    GameObject proj = GameObject.Instantiate(_projectile, _fromTransform.position, Quaternion.identity);
-    //    proj.GetComponent<Projectile>()._direction = _direction;
-    //    Debug.Log($"Projétil lançado na direção {_direction}");
-    //}
+    public static void PlayerShoot(Transform _shootOrigin, Vector3 _facing, int _playerId)
+    {
+        NetworkManager.instance.InstantiateProjectile(_shootOrigin).Initialize(_facing, _playerId);
+    }
 }

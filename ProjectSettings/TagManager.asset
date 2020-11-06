@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Block
   - 
   - 
   - 
@@ -40,4 +40,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 74945829
+    locked: 0
+  - name: GroundDetails
+    uniqueID: 2582685155
+    locked: 0
+  - name: BlockObjects
+    uniqueID: 1776810941
+    locked: 0
+  - name: OverCharacters
+    uniqueID: 2662162175
     locked: 0

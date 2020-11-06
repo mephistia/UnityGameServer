@@ -129,6 +129,63 @@ public class ServerSend
             SendTCPDataToAll(_packet);
         }
     }
+
+    public static void PlayerHealth(Player _player)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerHealth))
+        {
+            _packet.Write(_player.id);
+            _packet.Write(_player.health);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void PlayerRespawned(Player _player)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerRespawned))
+        {
+            _packet.Write(_player.id);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void SpawnProjectile(Projectile _projectile, int _byPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnProjectile))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+            _packet.Write(_byPlayer);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void ProjectilePosition(Projectile _projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.projectilePosition))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void ProjectileDamaged(Projectile _projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.projectileDamaged))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+            _packet.Write(_projectile.direction);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
     #endregion
 
 }
