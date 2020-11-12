@@ -9,7 +9,8 @@ public class GameCharacter : MonoBehaviour
     public Transform shootOrigin;
     public float health;
     public float maxHealth = 100f;
-    private float moveSpeed = 150f;
+    [SerializeField]
+    private float moveSpeed = 300f; // deixar igual no client para predict!
 
     protected float GetMoveSpeed()
     {
@@ -23,15 +24,18 @@ public class GameCharacter : MonoBehaviour
 
     public virtual void TakeDamage(float _damage)
     {
+        // não recebe dano depois de morto
         if (health <= 0f)
             return;
 
         health -= _damage;
 
+        // se nessa execução morreu:
         if (health <= 0f)
-        { 
+        {
             // matar o personagem
-            //...
+            //... animação?
+            Destroy(gameObject);
         }
     }
 }

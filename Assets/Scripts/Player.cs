@@ -67,7 +67,7 @@ public class Player : GameCharacter
         // Aplica no rigidbody2d do jogador
         GameBehaviors.MovePlayer(rb2d, _inputDirection, GetMoveSpeed());
 
-        //ServerSend.PlayerVelocity(this);
+        // responder com o id recebido
         ServerSend.PlayerPosition(this);
     }
 
@@ -75,6 +75,7 @@ public class Player : GameCharacter
     {
         GameBehaviors.RotateToAngle(this.transform, _angle);
 
+        // responder com o id recebido
         ServerSend.PlayerRotation(this);
     }
 
@@ -103,13 +104,15 @@ public class Player : GameCharacter
             if (currentLifes > 0)
             {
                 // respawn
-                transform.position = new Vector3(0f, 0f, 0f);
+                Vector3 _position = (id == 1) ? new Vector3(-6.5f, 0, 0) : new Vector3(6.5f, 0, 0);
+                transform.position = _position;
                 ServerSend.PlayerPosition(this);
                 StartCoroutine(Respawn());
             }
             else
             {
                 // GameOver? Assistir o outro jogador?
+                Debug.Log("Game Over");
             }
         }
 

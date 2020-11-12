@@ -32,15 +32,13 @@ public class Server
         tcpListener = new TcpListener(IPAddress.Any, Port);
         tcpListener.Start();
         tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null); // conexão inicial com recursão
-        Debug.Log($"Server started on port {Port} for TCP.");
 
 
         // UDP
         udpListener = new UdpClient(Port);
         udpListener.BeginReceive(UDPReceiveCallback, null);
-        Debug.Log($"Server started on port {Port} for UDP.");
 
-        //Debug.Log($"Server started on port {Port}.");
+        Debug.Log($"Server started on port {Port}.");
     }
 
     private static void TCPConnectCallback(IAsyncResult _result)

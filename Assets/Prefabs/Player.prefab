@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4678458430181219285}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,15 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c4e9e011921494428ece243377b54f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  username: 
   velocity: {x: 0, y: 0}
   rb2d: {fileID: 4678458430181219285}
   shootOrigin: {fileID: 6723864803012183094}
   health: 0
   maxHealth: 100
+  id: 0
+  username: 
   maxLifes: 3
   currentLifes: 0
+  rotId: 0
+  posId: 0
 --- !u!58 &7834423013306281570
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -108,8 +110,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1776810941
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ac9e29f61ae498942abbf916c7c7c108, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

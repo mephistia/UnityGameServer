@@ -82,6 +82,7 @@ public class ServerSend
             _packet.Write(_player.username);
             _packet.Write(_player.transform.position);
             _packet.Write(_player.transform.rotation);
+            _packet.Write(_player.maxHealth);
 
             SendTCPData(_toClient, _packet);
         }
@@ -93,7 +94,6 @@ public class ServerSend
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.position);
-
             SendUDPDataToAll(_packet);
         }
     }
@@ -104,21 +104,10 @@ public class ServerSend
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.rotation);
-
             SendUDPDataToAll(_packet);
         }
     }
 
-    public static void PlayerVelocity(Player _player)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.playerVelocity))
-        {
-            _packet.Write(_player.id);
-            _packet.Write(_player.velocity);
-
-            SendUDPDataToAll(_packet);
-        }
-    }
 
     public static void PlayerDisconnected(int _playerId)
     {
@@ -137,7 +126,7 @@ public class ServerSend
             _packet.Write(_player.id);
             _packet.Write(_player.health);
 
-            SendUDPDataToAll(_packet);
+            SendTCPDataToAll(_packet);
         }
     }
 
@@ -147,7 +136,7 @@ public class ServerSend
         {
             _packet.Write(_player.id);
 
-            SendUDPDataToAll(_packet);
+            SendTCPDataToAll(_packet);
         }
     }
 
@@ -181,6 +170,51 @@ public class ServerSend
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
             _packet.Write(_projectile.direction);
+            _packet.Write(_projectile.collisionTag);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void SpawnEnemy(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEnemy))
+        {
+            _packet.Write(_enemy.id);
+            _packet.Write(_enemy.transform.position);
+            _packet.Write((int)_enemy.type);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void EnemyPosition(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.enemyPosition))
+        {
+            _packet.Write(_enemy.id);
+            _packet.Write(_enemy.transform.position);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void EnemyHealth(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.enemyHealth))
+        {
+            _packet.Write(_enemy.id);
+            _packet.Write(_enemy.health);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void StatueHealth(StatueManager _statue)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.statueHealth))
+        {
+            _packet.Write(_statue.health);
 
             SendTCPDataToAll(_packet);
         }

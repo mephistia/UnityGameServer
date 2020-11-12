@@ -12,13 +12,17 @@ public enum ServerPackets
     spawnPlayer,
     playerPosition,
     playerRotation,
-    playerVelocity,
+    //playerVelocity,
     playerDisconnected,
     playerHealth,
     playerRespawned,
     spawnProjectile,
     projectilePosition,
-    projectileDamaged
+    projectileDamaged,
+    spawnEnemy,
+    enemyPosition,
+    enemyHealth,
+    statueHealth
 }
 
 // Do cliente para server

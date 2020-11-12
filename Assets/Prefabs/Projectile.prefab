@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5472632880137749970}
   - component: {fileID: 4216516023573005512}
   - component: {fileID: 6951270704256521065}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,5 +138,5 @@ MonoBehaviour:
   rb2d: {fileID: 4216516023573005512}
   direction: {x: 0, y: 0, z: 0}
   speed: 300
-  damage: 25
+  damage: 20
   bulletRadius: 0.09

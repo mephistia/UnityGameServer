@@ -8,12 +8,14 @@ public class GameBehaviors : MonoBehaviour
     public static void MovePlayer(Rigidbody2D _rb2d, Vector2 _movement, float _speed)
     {
         _rb2d.velocity = _movement * _speed;
+        //_transform.Translate(_movement * _speed);
     }
 
 
     // Rotacionar para um ângulo
     public static void RotateToAngle(Transform _transform, float _angle)
     {
+        //_transform.rotation = Quaternion.Euler(new Vector3(0, 0, -_angle));
         _transform.rotation = Quaternion.Euler(new Vector3(0, 0, -_angle));
     }
 

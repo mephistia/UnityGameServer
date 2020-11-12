@@ -12,9 +12,10 @@ public class Projectile : MonoBehaviour
     public Rigidbody2D rb2d;
     public Vector3 direction;
     public float speed = 300f;
-    public float damage = 25f;
+    public float damage = 2f;  // alterado no editor
     public float bulletRadius = 0.09f;
     private float timeToDestroy = 10f;
+    public string collisionTag;
 
     protected virtual void Start()
     {
@@ -43,18 +44,25 @@ public class Projectile : MonoBehaviour
 
     protected virtual void DoDamage(Collider2D _collider) // dar override no script de projétil do inimigo
     {
-        ServerSend.ProjectileDamaged(this);
 
         if (_collider.CompareTag("Enemy"))
-            _collider.GetComponent<GameCharacter>().TakeDamage(damage);
+        {
+            _collider.GetComponent<Enemy>().TakeDamage(damage);
+            collisionTag = "Enemy";
+        }
+        else
+            collisionTag = "Object";
 
-        projectiles.Remove(id);
-        Destroy(gameObject);
+        ServerSend.ProjectileDamaged(this);
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         Collider2D _collider = collision.collider;
         DoDamage(_collider); // causa dano se for inimigo
+
+        projectiles.Remove(id);
+        Destroy(gameObject);
+        return;
     }
 }
