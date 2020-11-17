@@ -21,14 +21,13 @@ public class NetworkManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.Log("Instance already exists, destroying object...");
             Destroy(this);
         }
     }
 
     private void Start()
     {
-        QualitySettings.vSyncCount = 0;
+        QualitySettings.vSyncCount = 0; // otmimizar processo do server
         Application.targetFrameRate = 30;
        
         // max players, port
