@@ -12,6 +12,8 @@ public class GameCharacter : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 300f; // deixar igual no client para predict!
 
+    public int energyCount = 0;
+
     protected float GetMoveSpeed()
     {
         return moveSpeed;

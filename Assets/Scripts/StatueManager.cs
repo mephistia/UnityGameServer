@@ -14,13 +14,24 @@ public class StatueManager : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        health -= (_damage / 10f); //teste
+        if (_damage > 0f)
+            health -= _damage;
 
         if (health <= 0f)
         {
             // game over??
             Debug.Log("Game Over!!");
         }
+
+        ServerSend.StatueHealth(this);
+    }
+
+    public void Heal(float _amount)
+    {
+        health += _amount;
+
+        if (health > maxHealth)
+            health = maxHealth;
 
         ServerSend.StatueHealth(this);
     }

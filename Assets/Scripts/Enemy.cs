@@ -33,19 +33,21 @@ public class Enemy : GameCharacter
     public Player playerTarget;
     public StatueManager statueTarget;
     public Enemy enemyTarget;
-
     public NavMeshAgent agent;
 
     public float detectionRange = 10f; // jogador é 0.5
     public float attackRange = 4f;
     private float attackCooldown = 1.5f;
-    private float damage = 15f;
+    private float damage = 8f;
 
     public EnemyType type;
 
     private float timeStamp = 0f;
 
     WaitForSeconds destinationDelay = new WaitForSeconds(0.5f);
+
+    private float stunTime = 1f;
+    public bool isStunned = false;
 
     private void Start()
     {
@@ -60,6 +62,7 @@ public class Enemy : GameCharacter
         agent = GetComponent<NavMeshAgent>();
         agent.updateUpAxis = false;
         agent.updateRotation = false;
+        rb2d.isKinematic = true;
     }
 
     public void Initialize(EnemyType _type) // chamar depois de instanciar
@@ -125,7 +128,22 @@ public class Enemy : GameCharacter
                 break;
         }
 
+        if (agent.isStopped)
+        {
+            Debug.Log($"Enemy {id} is stunned! {stunTime.ToString("F1")} seconds remaining.");
+            stunTime -= Time.deltaTime;
+
+            if (stunTime <= 0f)
+            {
+                stunTime = 2.5f;
+                agent.isStopped = false;
+                rb2d.isKinematic = true;
+                Debug.Log($"Enemy {id} returning to move.");
+            }
+        }
+
         ServerSend.EnemyPosition(this);
+
     }
 
     private bool LookForPlayer()
@@ -305,6 +323,11 @@ public class Enemy : GameCharacter
         if (health <= 0f)
         {
             health = 0f;
+
+
+            NetworkManager.instance.InstantiateEnergy(transform.position);
+
+
             enemies.Remove(id);
             Destroy(gameObject);
         }

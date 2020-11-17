@@ -48,4 +48,20 @@ public class ServerHandle
         Server.clients[_fromClient].player.Shoot(_shootDirection);
     }
 
+    public static void PlayerShootSkill(int _fromClient, Packet _packet)
+    {
+        Vector3 _shootDirection = _packet.ReadVector3();
+
+        Server.clients[_fromClient].player.ShootSkill(_shootDirection);
+    }
+
+    public static void PlayerTankSkill(int _fromClient, Packet _packet)
+    {
+        Vector3 _shootDirection = _packet.ReadVector3();
+        float _pressedTime = _packet.ReadFloat();
+
+        Server.clients[_fromClient].player.ShootSkill(_shootDirection, _pressedTime);
+    }
+
+
 }

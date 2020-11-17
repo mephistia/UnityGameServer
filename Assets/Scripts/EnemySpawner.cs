@@ -15,6 +15,10 @@ public class EnemySpawner : MonoBehaviour
             EnemyType.melee,
             EnemyType.melee,
             EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
             EnemyType.melee
         }, 
 
@@ -26,12 +30,18 @@ public class EnemySpawner : MonoBehaviour
              EnemyType.melee,
              EnemyType.melee,
              EnemyType.ranger,
+             EnemyType.melee,
+             EnemyType.melee,
+             EnemyType.ranger,
+             EnemyType.melee,
+             EnemyType.melee,
+             EnemyType.ranger,
              EnemyType.melee
         }
     
     };
 
-    public float cooldown = 10f;
+    public float cooldown = 7f;
     public float timeStamp = 0f;
     public int currentWave = 0; // id
     public Transform spawnerLeft, spawnerRight;
@@ -47,8 +57,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // 1 jogador pelo menos
-        if (Server.clients.TryGetValue(1, out Client _client))
+        if (Server.clients.TryGetValue(2, out Client _client))
         {
             if (_client.player)
             {

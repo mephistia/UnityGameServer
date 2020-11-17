@@ -12,7 +12,6 @@ public enum ServerPackets
     spawnPlayer,
     playerPosition,
     playerRotation,
-    //playerVelocity,
     playerDisconnected,
     playerHealth,
     playerRespawned,
@@ -22,7 +21,13 @@ public enum ServerPackets
     spawnEnemy,
     enemyPosition,
     enemyHealth,
-    statueHealth
+    statueHealth,
+    spawnEnergy,
+    despawnEnergy,
+    energyPickedUp, 
+    spawnProjectileSkill,
+    tankAttacked, 
+    spawnProjectileTank
 }
 
 // Do cliente para server
@@ -31,7 +36,11 @@ public enum ClientPackets
     welcomeReceived = 1,
     playerMovement,
     playerShoot,
-    playerRotation
+    playerRotation,
+    playerShootSkill,
+    playerHealingSelf,
+    playerHealingStatue,
+    playerTankSkill
 }
 public class Packet : IDisposable
 {

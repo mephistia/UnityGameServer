@@ -5,16 +5,16 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
-    private static int nextProjectileId = 1;
+    protected static int nextProjectileId = 1;
 
     public int id;
     public int byPlayer;
     public Rigidbody2D rb2d;
     public Vector3 direction;
     public float speed = 300f;
-    public float damage = 2f;  // alterado no editor
+    public float damage = 5f;  // alterado no editor
     public float bulletRadius = 0.09f;
-    private float timeToDestroy = 10f;
+    protected float timeToDestroy = 10f;
     public string collisionTag;
 
     protected virtual void Start()
@@ -27,13 +27,16 @@ public class Projectile : MonoBehaviour
         ServerSend.SpawnProjectile(this, byPlayer);
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         ServerSend.ProjectilePosition(this);
 
         // destruir se ficar muito tempo na tela
         if ((timeToDestroy -= Time.fixedDeltaTime) <= 0f)
+        {
+            projectiles.Remove(id);
             Destroy(gameObject);
+        }
     }
 
     public void Initialize(Vector3 _direction, int _byPlayer)
@@ -45,9 +48,9 @@ public class Projectile : MonoBehaviour
     protected virtual void DoDamage(Collider2D _collider) // dar override no script de projétil do inimigo
     {
 
-        if (_collider.CompareTag("Enemy"))
+        if (_collider.gameObject.CompareTag("Enemy"))
         {
-            _collider.GetComponent<Enemy>().TakeDamage(damage);
+            _collider.gameObject.GetComponent<Enemy>().TakeDamage(damage);
             collisionTag = "Enemy";
         }
         else

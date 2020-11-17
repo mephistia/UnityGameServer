@@ -11,7 +11,14 @@ public class Player : GameCharacter
     public int currentLifes;
 
     private bool[] inputs;
-    private float angle;
+    private float angle = 0f;
+
+    public int maxEnergies = 5;
+
+    public PolygonCollider2D tankTrigger;
+    public List<Collider2D> stuffOnTrigger = new List<Collider2D>(); // itens adicionados no objeto de trigger
+
+    private float areaDamage = 0;
 
     private void Start()
     {
@@ -26,7 +33,18 @@ public class Player : GameCharacter
         currentLifes = maxLifes;
         inputs = new bool[4];
         velocity = Vector2.zero;
-        angle = 0;
+
+        // mudar collider
+        if (id == 2)
+        {
+            GetComponent<CircleCollider2D>().enabled = false;
+            areaDamage = 12f;
+        }
+        else
+        {
+            GetComponent<PolygonCollider2D>().enabled = false;
+            tankTrigger.enabled = false;
+        }
     }
 
     public void FixedUpdate()
@@ -84,9 +102,45 @@ public class Player : GameCharacter
         if (health <= 0)
             return;
 
+        if (id == 1)
+            GameBehaviors.PlayerShoot(shootOrigin, _facing, id);
+        else
+        {
+            // saber quais inimigos atacou
+            bool[] attackedEnemy = new bool[stuffOnTrigger.Count];
+            foreach (Collider2D col in stuffOnTrigger)
+                attackedEnemy[stuffOnTrigger.IndexOf(col)] = GameBehaviors.PlayerAreaAttack(_facing, col, areaDamage);
 
-        GameBehaviors.PlayerShoot(shootOrigin, _facing, id);
-        
+            // feedback visual
+            bool atLeastOneEnemy = false;
+            foreach (bool _attacked in attackedEnemy)
+            {
+                if (_attacked) atLeastOneEnemy = true;
+                break;
+            }
+            Debug.Log($"Attacked enemies? {atLeastOneEnemy}");
+
+            Vector3 animPos = tankTrigger.transform.position;
+
+            ServerSend.TankAttacked(animPos, atLeastOneEnemy);
+        } 
+    }
+
+    public void ShootSkill(Vector3 _facing, float _pressedTime = 0f)
+    {
+        if (health <= 0)
+            return;
+
+        if (id == 1)
+            GameBehaviors.PlayerShootSkill(shootOrigin, _facing, id);
+        else
+        {
+            float strengthPercent = Mathf.InverseLerp(0, 2, _pressedTime);
+
+            GameBehaviors.PlayerTankSkill(shootOrigin, _facing, id, strengthPercent);
+
+            // projéteis enviam info para os clientes em seus próprios scripts
+        }
     }
 
     public override void TakeDamage(float _damage)

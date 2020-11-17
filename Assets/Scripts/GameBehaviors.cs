@@ -8,7 +8,6 @@ public class GameBehaviors : MonoBehaviour
     public static void MovePlayer(Rigidbody2D _rb2d, Vector2 _movement, float _speed)
     {
         _rb2d.velocity = _movement * _speed;
-        //_transform.Translate(_movement * _speed);
     }
 
 
@@ -23,5 +22,26 @@ public class GameBehaviors : MonoBehaviour
     public static void PlayerShoot(Transform _shootOrigin, Vector3 _facing, int _playerId)
     {
         NetworkManager.instance.InstantiateProjectile(_shootOrigin).Initialize(_facing, _playerId);
+    }
+
+    public static void PlayerShootSkill(Transform _shootOrigin, Vector3 _facing, int _playerId)
+    {
+        NetworkManager.instance.InstantiateProjectileSkill(_shootOrigin).Initialize(_facing, _playerId);
+    }
+
+    public static bool PlayerAreaAttack(Vector3 _facing, Collider2D _col, float _damage)
+    {
+       if (_col.TryGetComponent<Enemy>(out Enemy _enemy))
+        {
+            _enemy.TakeDamage(_damage); // já envia vida do inimigo
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void PlayerTankSkill(Transform _shootOrigin, Vector3 _facing, int _playerId, float _strength)
+    {
+        NetworkManager.instance.InstantiateProjectileTank(_shootOrigin).Initialize(_facing, _playerId, _strength);
     }
 }

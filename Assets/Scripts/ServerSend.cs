@@ -188,6 +188,8 @@ public class ServerSend
         }
     }
 
+   
+
     public static void EnemyPosition(Enemy _enemy)
     {
         using (Packet _packet = new Packet((int)ServerPackets.enemyPosition))
@@ -219,6 +221,74 @@ public class ServerSend
             SendTCPDataToAll(_packet);
         }
     }
+
+    public static void SpawnEnergy(Energy _energy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEnergy))
+        {
+            _packet.Write(_energy.id);
+            _packet.Write(_energy.transform.position);
+            _packet.Write(_energy.timeToDestroy);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void DespawnEnergy(Energy _energy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.despawnEnergy))
+        {
+            _packet.Write(_energy.id);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void EnergyPickedUp(Player _byPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.energyPickedUp))
+        {
+            _packet.Write(_byPlayer.id);
+            // manda apenas para o jogador
+            SendTCPData(_byPlayer.id, _packet);
+        }
+    }
+
+    public static void SpawnProjectileSkill(ProjectileSkill _projectile, int _byPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnProjectileSkill))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+            _packet.Write(_byPlayer);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void SpawnProjectileTank(ProjectileTank _projectile, int _byPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnProjectileTank))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+            _packet.Write(_byPlayer);
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void TankAttacked(Vector3 _position, bool _attackedEnemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.tankAttacked))
+        {
+            _packet.Write(_position); // posição para animação
+            
+
+            SendTCPDataToAll(_packet);
+        }
+    }
+
 
     #endregion
 
