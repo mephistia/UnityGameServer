@@ -146,7 +146,6 @@ public class ServerSend
         {
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
-            _packet.Write(_byPlayer);
 
             SendTCPDataToAll(_packet);
         }
@@ -260,7 +259,6 @@ public class ServerSend
         {
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
-            _packet.Write(_byPlayer);
 
             SendTCPDataToAll(_packet);
         }
@@ -272,7 +270,6 @@ public class ServerSend
         {
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
-            _packet.Write(_byPlayer);
 
             SendTCPDataToAll(_packet);
         }
@@ -289,6 +286,38 @@ public class ServerSend
         }
     }
 
+    public static void ShowCombine(Player _player)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.showCombine))
+        {
+            _packet.Write(_player.id);
+            _packet.Write(_player.canCombine);
+
+            SendTCPData(_player.id, _packet);
+        }
+    }
+
+    public static void WaitingCombine(Player _player)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.waitingCombine))
+        {
+            _packet.Write(_player.id);
+            _packet.Write(_player.waitingCombine);
+
+            SendTCPData(_player.id, _packet);
+        }
+    }
+
+    public static void IsCombined(Player _player)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.isCombined))
+        {
+            _packet.Write(_player.id);
+            _packet.Write(_player.isCombined);
+
+            SendTCPData(_player.id, _packet);
+        }
+    }
 
     #endregion
 

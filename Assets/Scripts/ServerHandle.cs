@@ -63,5 +63,12 @@ public class ServerHandle
         Server.clients[_fromClient].player.ShootSkill(_shootDirection, _pressedTime);
     }
 
+    public static void AskCombine(int _fromClient, Packet _packet)
+    {
+        int _playerID = _packet.ReadInt();
+
+        if (_playerID == _fromClient)
+            Server.clients[_fromClient].player.WaitCombine(true);
+    }
 
 }

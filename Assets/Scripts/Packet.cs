@@ -27,7 +27,10 @@ public enum ServerPackets
     energyPickedUp, 
     spawnProjectileSkill,
     tankAttacked, 
-    spawnProjectileTank
+    spawnProjectileTank,
+    showCombine,
+    waitingCombine,
+    isCombined
 }
 
 // Do cliente para server
@@ -40,7 +43,8 @@ public enum ClientPackets
     playerShootSkill,
     playerHealingSelf,
     playerHealingStatue,
-    playerTankSkill
+    playerTankSkill,
+    askCombine
 }
 public class Packet : IDisposable
 {

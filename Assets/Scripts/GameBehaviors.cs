@@ -44,4 +44,23 @@ public class GameBehaviors : MonoBehaviour
     {
         NetworkManager.instance.InstantiateProjectileTank(_shootOrigin).Initialize(_facing, _playerId, _strength);
     }
+
+    public static void CombinePlayers(Player _playerRanger, Player _playerTank)
+    {
+        // desativar collider do ranger
+        _playerRanger.GetComponent<CircleCollider2D>().enabled = false;
+
+        _playerRanger.transform.position = _playerTank.transform.position;
+        ServerSend.PlayerPosition(_playerRanger);
+
+    }
+
+    public static void UndoCombine(Player _playerRanger, Player _playerTank)
+    {
+        _playerRanger.GetComponent<CircleCollider2D>().enabled = true;
+
+        _playerRanger.isCombined = _playerTank.isCombined = false;
+
+
+    }
 }

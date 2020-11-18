@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     public Rigidbody2D rb2d;
     public Vector3 direction;
     public float speed = 300f;
-    public float damage = 5f;  // alterado no editor
+    public float damage = 3.5f;  // alterado no editor
     public float bulletRadius = 0.09f;
     protected float timeToDestroy = 10f;
     public string collisionTag;

@@ -36,9 +36,9 @@ public class Enemy : GameCharacter
     public NavMeshAgent agent;
 
     public float detectionRange = 10f; // jogador é 0.5
-    public float attackRange = 4f;
+    public float attackRange = 3.5f;
     private float attackCooldown = 1.5f;
-    private float damage = 8f;
+    private float damage = 11f;
 
     public EnemyType type;
 

@@ -133,7 +133,8 @@ public class Server
                 {(int)ClientPackets.playerRotation, ServerHandle.PlayerRotation },
                 {(int)ClientPackets.playerShoot, ServerHandle.PlayerShoot },
                 {(int)ClientPackets.playerShootSkill, ServerHandle.PlayerShootSkill },
-                {(int)ClientPackets.playerTankSkill, ServerHandle.PlayerTankSkill }
+                {(int)ClientPackets.playerTankSkill, ServerHandle.PlayerTankSkill },
+                {(int)ClientPackets.askCombine, ServerHandle.AskCombine }
             };
 
         Debug.Log("Initialized Packets.");

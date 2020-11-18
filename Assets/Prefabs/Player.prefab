@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4287078913666722610}
   - component: {fileID: 4678458430181219285}
   - component: {fileID: 6208064585010177543}
+  - component: {fileID: 7034058369396827844}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -137,6 +138,10 @@ MonoBehaviour:
   maxEnergies: 5
   tankTrigger: {fileID: 1821120756368401054}
   stuffOnTrigger: []
+  otherPlayer: {fileID: 0}
+  isCombined: 0
+  canCombine: 0
+  waitingCombine: 0
 --- !u!58 &7834423013306281570
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -192,7 +197,7 @@ SpriteRenderer:
   m_SortingLayerID: 1776810941
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: dfa90cb2b7833914db3ac50958bda640, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ac9e29f61ae498942abbf916c7c7c108, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -253,6 +258,22 @@ PolygonCollider2D:
       - {x: -3.46, y: -3.26}
       - {x: 3.46, y: -3.26}
       - {x: 2.511717, y: 2.28873}
+--- !u!70 &7034058369396827844
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5928965515381141329}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 14.056984, y: 14.056984}
+  m_Direction: 0
 --- !u!1 &6320365858955813547
 GameObject:
   m_ObjectHideFlags: 0

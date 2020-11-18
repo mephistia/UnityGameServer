@@ -18,33 +18,37 @@ public class Player : GameCharacter
     public PolygonCollider2D tankTrigger;
     public List<Collider2D> stuffOnTrigger = new List<Collider2D>(); // itens adicionados no objeto de trigger
 
+    public Player otherPlayer;
+
     private float areaDamage = 0;
 
-    private void Start()
-    {
-        SetMoveSpeed(GetMoveSpeed() * Time.fixedDeltaTime);
-    }
+    public bool isCombined = false, canCombine = false, waitingCombine = false;
 
     public void Initialize(int _id, string _username)
     {
         id = _id;
         username = _username;
-        health = maxHealth;
-        currentLifes = maxLifes;
-        inputs = new bool[4];
-        velocity = Vector2.zero;
 
-        // mudar collider
         if (id == 2)
         {
             GetComponent<CircleCollider2D>().enabled = false;
-            areaDamage = 12f;
+            areaDamage = 10f;
+            maxHealth = 140f;
+            SetMoveSpeed(250f); // outro jogador 300
+
         }
         else
         {
             GetComponent<PolygonCollider2D>().enabled = false;
             tankTrigger.enabled = false;
         }
+
+        SetMoveSpeed(GetMoveSpeed() * Time.fixedDeltaTime);
+
+        health = maxHealth;
+        currentLifes = maxLifes;
+        inputs = new bool[4];
+        velocity = Vector2.zero;
     }
 
     public void FixedUpdate()
@@ -52,31 +56,59 @@ public class Player : GameCharacter
         if (health <= 0f)
             return;
 
-
-        Vector2 _inputDirection = Vector2.zero;
-
-        if (inputs[0])
+        // PROBLEMAS
+        if (isCombined)
         {
-            _inputDirection.y += 1;
+            // se for o ranger, só rotaciona
+            if (id == 1)
+            {
+                transform.position = otherPlayer.transform.position;
+                Rotate(angle);
+            }
+
+            // se for o tank, só move
+            else
+            {
+                Vector2 _inputDirection = Vector2.zero;
+
+                if (inputs[0])
+                    _inputDirection.y += 1;
+
+                if (inputs[1])
+                    _inputDirection.x -= 1;
+
+                if (inputs[2])
+                    _inputDirection.y -= 1;
+
+                if (inputs[3])
+                    _inputDirection.x += 1;
+
+                Move(_inputDirection);
+
+                transform.rotation = otherPlayer.transform.rotation;
+            }
         }
 
-        if (inputs[1])
-        {
-            _inputDirection.x -= 1;
-        }
 
-        if (inputs[2])
+        else 
         {
-            _inputDirection.y -= 1;
-        }
+            Vector2 _inputDirection = Vector2.zero;
 
-        if (inputs[3])
-        {
-            _inputDirection.x += 1;
-        }
+            if (inputs[0])
+                _inputDirection.y += 1;            
 
-        Move(_inputDirection);
-        Rotate(angle);
+            if (inputs[1])            
+                _inputDirection.x -= 1;            
+
+            if (inputs[2])            
+                _inputDirection.y -= 1;            
+
+            if (inputs[3])            
+                _inputDirection.x += 1;            
+
+            Move(_inputDirection);
+            Rotate(angle);
+        }
     }
 
     private void Move(Vector2 _inputDirection)
@@ -148,27 +180,45 @@ public class Player : GameCharacter
         if (health <= 0f)
             return;
 
-        health -= _damage;
-
-        if (health <= 0f)
+        if (isCombined && id == 1)
         {
-            health = 0f;
-            currentLifes--;
+            otherPlayer.TakeDamage(_damage);
+        }
 
-            if (currentLifes > 0)
+        else
+        {
+            health -= _damage;
+
+            if (health <= 0f)
             {
-                // respawn
-                Vector3 _position = (id == 1) ? new Vector3(-6.5f, 0, 0) : new Vector3(6.5f, 0, 0);
-                transform.position = _position;
-                ServerSend.PlayerPosition(this);
-                StartCoroutine(Respawn());
-            }
-            else
-            {
-                // GameOver? Assistir o outro jogador?
-                Debug.Log("Game Over");
+                health = 0f;
+                currentLifes--;
+
+                if (currentLifes > 0)
+                {
+                    if (id == 1)
+                    {
+                        GameBehaviors.UndoCombine(this, otherPlayer);
+                    }
+                    else
+                        GameBehaviors.UndoCombine(otherPlayer, this);
+
+
+                    // respawn
+                    Vector3 _position = (id == 1) ? new Vector3(-6.5f, 0, 0) : new Vector3(6.5f, 0, 0);
+                    transform.position = _position;
+                    ServerSend.PlayerPosition(this);
+                    StartCoroutine(Respawn());
+                }
+                else
+                {
+                    // GameOver? Assistir o outro jogador?
+                    Debug.Log("Game Over");
+                }
             }
         }
+
+        
 
         ServerSend.PlayerHealth(this);
     }
@@ -189,6 +239,65 @@ public class Player : GameCharacter
     public void SetAngle(float _angle)
     {
         angle = _angle;
+    }
+
+    // quando tiver outro jogador no trigger
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.TryGetComponent<Player>(out Player _otherPlayer))
+        {
+            canCombine = true;
+            _otherPlayer.canCombine = true;
+
+            ServerSend.ShowCombine(this);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        // se os dois jogadores estão esperando combinar mas ainda não combinaram
+        if (col.TryGetComponent<Player>(out Player _otherPlayer) && _otherPlayer.waitingCombine
+            && waitingCombine && !isCombined && !_otherPlayer.isCombined)
+        {
+            // combinar
+            isCombined = true;
+            _otherPlayer.isCombined = true;
+
+            if (_otherPlayer.id == 1)
+            {
+                GameBehaviors.CombinePlayers(_otherPlayer, this);
+            }
+            else
+            {
+                GameBehaviors.CombinePlayers(this, _otherPlayer);
+            }
+
+            otherPlayer = _otherPlayer;
+            _otherPlayer.otherPlayer = this;
+            ServerSend.IsCombined(this);
+        }
+    }
+
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.TryGetComponent<Player>(out Player _otherPlayer))
+        {
+            canCombine = false;
+            _otherPlayer.canCombine = false;
+            ServerSend.ShowCombine(this);
+
+            // se saiu do trigger, os dois não ficam mais esperando
+            waitingCombine = false;
+            _otherPlayer.waitingCombine = false;
+            ServerSend.WaitingCombine(this);
+        }
+    }
+
+    public void WaitCombine(bool _waiting)
+    {
+        waitingCombine = _waiting;
+        ServerSend.WaitingCombine(this);
     }
 
 }
