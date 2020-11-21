@@ -64,6 +64,9 @@ public class Player : GameCharacter
             {
                 transform.position = otherPlayer.transform.position;
                 Rotate(angle);
+
+                ServerSend.PlayerPosition(this);
+
             }
 
             // se for o tank, só move
@@ -86,6 +89,7 @@ public class Player : GameCharacter
                 Move(_inputDirection);
 
                 transform.rotation = otherPlayer.transform.rotation;
+                ServerSend.PlayerRotation(this);
             }
         }
 

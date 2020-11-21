@@ -12,6 +12,15 @@ public class EnemySpawner : MonoBehaviour
         // wave [0]
         new EnemyType[] 
         { 
+            // teste
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
+            EnemyType.melee,
             EnemyType.melee,
             EnemyType.melee,
             EnemyType.melee,
@@ -76,7 +85,7 @@ public class EnemySpawner : MonoBehaviour
                         spawnedLeft = false;
 
                     currentID++;
-                    timeStamp = Time.fixedTime + cooldown;
+                    timeStamp = Time.time + cooldown;
                 }
 
                 // ativar próxima wave:
